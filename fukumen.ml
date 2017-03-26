@@ -20,17 +20,15 @@ let next list' =
       else loop (List.append (List.append dn [(c, n + 1, (s, e))]) rest) [] (* break *)
   in List.rev (loop [] list)
 
-let () =
-  let s0 = [("A", 0, (0, 1)); ("B", 0, (0, 1))] in
-  print s0;
-  let s1 = next s0 in
-  print s1;
-  let s2 = next s1 in
-  print s2;
-  let s3 = next s2 in
-  print s3;
-  let s4 = next s3 in
-  print s4;
+let enum init =
+  let rec loop ls =
+    print ls;
+    let ls' = next ls in
+    if init = ls' then () else loop ls'
+  in loop init
 
-  (* let s0 = [("A", 1, (1, 2)); ("B", 0, (0, 1)); ("C", 0, (0, 1))] in *)
+let () =
+  enum [("A", 0, (0, 9)); ("B", 0, (0, 9)); ("C", 0, (0, 9))];
+
+  (* let data = [("A", 1, (1, 2)); ("B", 0, (0, 1)); ("C", 0, (0, 1))] in *)
   (* let data = [("H", 0); ("A", 0); ("C", 0); ("K", 0); ("E", 0); ("R", 0)] in *)
