@@ -3,22 +3,22 @@ open Core.Std
 (* HACKER *)
 (* ENERGY *)
 
-let print list =
+let print comb =
   let rec aux acc = function
     | [] -> print_endline (acc ^ "[EOS]")
     | (c, n, (s, e)) :: rest -> aux (acc ^ (sprintf "[%s: %d (%d~%d)] -> " c n s e)) rest
-  in aux "" list
+  in aux "" comb
 
-let next list' =
-  let list = List.rev list' in
-  let rec loop dn ls =
-    match ls with
+let next comb' =
+  let comb = List.rev comb' in
+  let rec loop dn cmb =
+    match cmb with
     | [] -> dn
     | (c, n, (s, e)) :: rest ->
       if n = e
       then loop (List.append dn [(c, s, (s, e))]) rest (* carry over *)
       else loop (List.append (List.append dn [(c, n + 1, (s, e))]) rest) [] (* break *)
-  in List.rev (loop [] list)
+  in List.rev (loop [] comb)
 
 let getc comb chr =
   let chr' = String.of_char chr in
@@ -44,22 +44,19 @@ let check comb =
   let energy = num_of "ENERGY" in
   (3 * hacker) = energy
 
-let check' comb =
-  let num_of = num comb in
-  let hacker = num_of "HACKER" in
-  hacker = 123456
+let dup comb =
+  comb
+  |> List.map ~f:(fun (_, n, _) -> n)
+  |> List.contains_dup ~compare:(fun a b -> a - b)
 
-let enum init =
-  let rec loop ls =
-    if check' ls
-    then print ls
+let find init =
+  let rec loop cmb =
+    if (not (dup cmb)) && check cmb
+    then print cmb
     else
-      let ls' = next ls in
-      if init = ls' then () else loop ls'
+      let cmb' = next cmb in
+      if init = cmb' then () else loop cmb'
   in loop init
 
 let () =
-  enum [("H", 1, (1, 3)); ("A", 0, (0, 9)); ("C", 0, (0, 9)); ("K", 0, (0, 9)); ("E", 0, (0, 9)); ("R", 0, (0, 9))];
-
-  (* let data = [("A", 1, (1, 2)); ("B", 0, (0, 1)); ("C", 0, (0, 1))] in *)
-  (* let data = [("H", 0); ("A", 0); ("C", 0); ("K", 0); ("E", 0); ("R", 0)] in *)
+  find [("H", 1, (1, 3)); ("A", 0, (0, 9)); ("C", 0, (0, 9)); ("K", 0, (0, 9)); ("E", 3, (3, 9)); ("R", 1, (1, 9)); ("N", 0, (0, 9)); ("G", 0, (0, 9)); ("Y", 1, (1, 9))]
