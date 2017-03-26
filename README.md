@@ -11,6 +11,12 @@ See [Verbal arithmetic](https://www.wikiwand.com/en/Verbal_arithmetic).
 $ opam install core
 ```
 
+### Problem
+
+```
+HACKER + HACKER + HACKER = ENERGY
+```
+
 ### Build
 
 `corebuild fukumen.native`
